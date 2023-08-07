@@ -1,7 +1,7 @@
 import './bootstrap';
 import { createApp } from 'vue'
-import Login from './components/Login'
+import Login from './components/Login.vue'
 
 createApp({})
-    .component('Login', login)
+    .component('Login', Login)
     .mount('#app')
