@@ -12,7 +12,7 @@ class AuthControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testUserCanLogin()
+    public function test_user_can_login()
     {
         $user = User::factory()->create();
 

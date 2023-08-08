@@ -31,9 +31,7 @@ class MessageController extends Controller
             'body' => $request->body
         ]);
 
-        return response()->json([
-            'message' => MessageResource::make($message),
-        ]);
+        return response()->json(MessageResource::make($message));
     }
 
     /**
