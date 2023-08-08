@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MessageResource;
+use App\Http\Resources\UserResource;
 use App\Models\Message;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,10 +25,15 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
-        return Message::create([
-            'user_id' => Auth::id(),
+        $message = Message::create([
+            'sender_id' => Auth::id(),
+            'receiver_id' => $request->receiver_id,
             'body' => $request->body
-        ])->toJson();
+        ]);
+
+        return response()->json([
+            'message' => MessageResource::make($message),
+        ]);
     }
 
     /**

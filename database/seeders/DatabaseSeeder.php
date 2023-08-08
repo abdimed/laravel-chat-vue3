@@ -16,8 +16,14 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
 
         \App\Models\User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@admin.com',
+            'name' => 'sender',
+            'email' => 'sender@ichat.com',
+            'password' => Hash::make('123')
+        ]);
+
+        \App\Models\User::factory()->create([
+            'name' => 'receiver',
+            'email' => 'receiver@ichat.com',
             'password' => Hash::make('123')
         ]);
     }
