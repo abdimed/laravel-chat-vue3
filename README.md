@@ -21,7 +21,7 @@ Before you begin, ensure you have met the following requirements:
 - **Composer**: [Install Composer](https://getcomposer.org/download/) for managing PHP dependencies.
 - **Node.js and npm**: [Install Node.js and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) to manage frontend assets.
 - **Pusher Account**: Create a [Pusher](https://pusher.com/) account and obtain your API keys.
-
+- **Laravel Echo**: Familiarize yourself with [Laravel Echo](https://laravel.com/docs/8.x/broadcasting) for real-time events.
 ### 
 ## Installation
 
