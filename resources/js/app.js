@@ -1,7 +1,10 @@
-import './bootstrap';
-import { createApp } from 'vue'
-import Login from './components/Login.vue'
+import './bootstrap'
 
-createApp({})
-    .component('Login', Login)
+import { createApp} from 'vue'
+
+import App from './views/templates/App.vue'
+import router from './router/index'
+
+createApp(App)
+    .use(router)
     .mount('#app')

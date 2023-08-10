@@ -27,24 +27,19 @@
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 const email = ref('');
 const password = ref('');
+const router = useRouter();
 
 const submitForm = async () => {
-  try {
-    const response = await axios.post('/api/login', {
-      email: email.value,
-      password: password.value,
-    });
+    try {
+        await axios.post('/api/login', data)
+        await router.push({ name: 'dashboard' })
 
-    const { user, token } = response.data;
-
-    console.log('User:', user);
-    console.log('Token:', token);
-
-  } catch (error) {
-    console.error('Login failed:', error);
-  }
+    } catch (error) {
+        console.error('Login failed:', error);
+    }
 };
 </script>

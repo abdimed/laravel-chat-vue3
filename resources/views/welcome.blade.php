@@ -18,7 +18,9 @@
     </header>
 
     <main id="app">
-        <login />
+
+
+
     </main>
 
     <footer>
