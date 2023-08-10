@@ -17,7 +17,7 @@
 
     </header>
 
-    <main id="app">
+    <main id="app" class ="">
 
 
 

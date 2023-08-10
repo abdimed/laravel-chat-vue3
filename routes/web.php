@@ -18,4 +18,4 @@ use Illuminate\Support\Facades\Route;
 // })->name('login');
 
 
-Route::view('/{any}', 'welcome')->where('any', '.*');
+Route::view('/{any}', 'welcome')->middleware('auth')->where('any', '.*');

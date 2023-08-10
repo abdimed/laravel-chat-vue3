@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="flex items-center justify-center min-h-screen w-full bg-black">
         <div class="bg-white p-8 rounded-lg shadow-md w-full sm:w-96">
             <h2 class="text-2xl font-semibold mb-4">Login</h2>
             <form @submit.prevent="submitForm">
@@ -35,8 +35,11 @@ const router = useRouter();
 
 const submitForm = async () => {
     try {
-        await axios.post('/api/login', data)
-        await router.push({ name: 'dashboard' })
+        await axios.post('/api/login', {
+            email: email.value,
+            password: password.value,
+        });
+        await router.push({ name: 'Dashboard' })
 
     } catch (error) {
         console.error('Login failed:', error);
