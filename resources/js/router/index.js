@@ -1,16 +1,38 @@
 import { createWebHistory, createRouter } from "vue-router";
 
+import App from '../views/templates/App.vue';
 import Login from "../views/Login.vue";
-import Dashboard from "../views/Dashboard.vue";
+import Messages from "../views/Messages.vue";
+import Conversation from "../views/components/Chat/Box.vue";
 
 const routes = [
-  { path: "/login", name: "Login", component: Login },
-  { path: "/dashboard", name: "Dashboard", component: Dashboard }
+    {
+        path: '/login',
+        name: "login",
+        component: Login
+    },
+
+    {
+        path: "/messages",
+        name: "messages",
+        component: Messages,
+        children: [
+            {
+                path: ':conversationId',
+                name: "conversation",
+                component: Conversation
+            }
+        ]
+    },
+
+
+
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes
+    history: createWebHistory(),
+    linkActiveClass: 'text-black text-3xl',
+    routes
 });
 
 export default router;

@@ -17,8 +17,8 @@ class MessageResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'sender' => UserResource::make(Auth::user()),
-            'receiver' => UserResource::make(User::find($this->receiver_id)),
+            'conversation_id' =>$this->conversation_id,
+            'user' => UserResource::make($this->user),
             'body' => $this->body,
         ];
     }

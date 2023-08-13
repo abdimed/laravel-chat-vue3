@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ConversationController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\UserController;
 
@@ -23,6 +24,10 @@ use App\Http\Controllers\Api\UserController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::apiResource('conversations', ConversationController::class)->middleware('auth:sanctum');
+
 Route::apiResource('messages', MessageController::class)->middleware('auth:sanctum');
+
+Route::get('/users/currentuser', [UserController::class, 'getCurrentUser'])->middleware('auth:sanctum');
 
 Route::apiResource('users', UserController::class);

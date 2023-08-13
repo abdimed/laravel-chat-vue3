@@ -3,18 +3,22 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\ConversationResource;
+use App\Http\Resources\MessageResource;
+use App\Models\Conversation;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class UserController extends Controller
+class ConversationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return response()->json(User::all());
+        $conversations = ConversationResource::collection(Auth::user()->conversations);
+        return response()->json($conversations);
     }
 
     /**
@@ -30,7 +34,8 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $conversation = ConversationResource::make(Conversation::findOrFail($id));
+        return response()->json($conversation);
     }
 
     /**
@@ -47,10 +52,5 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
-    }
-
-    public function getCurrentUser()
-    {
-        return response()->json(UserResource::make(auth()->user()));
     }
 }

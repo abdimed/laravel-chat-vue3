@@ -2,7 +2,7 @@
     <div class="flex items-center justify-center min-h-screen w-full bg-black">
         <div class="bg-white p-8 rounded-lg shadow-md w-full sm:w-96">
             <h2 class="text-2xl font-semibold mb-4">Login</h2>
-            <form @submit.prevent="submitForm">
+            <form @submit.prevent="login">
                 <div class="mb-4">
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email:</label>
                     <input type="email" id="email" v-model="email" required
@@ -33,16 +33,21 @@ const email = ref('');
 const password = ref('');
 const router = useRouter();
 
-const submitForm = async () => {
+const login = async () => {
     try {
+
+        await axios.get('/sanctum/csrf-cookie');
+
         await axios.post('/api/login', {
             email: email.value,
             password: password.value,
         });
-        await router.push({ name: 'Dashboard' })
+
+        await router.push({ name: 'messages' });
 
     } catch (error) {
         console.error('Login failed:', error);
     }
 };
+
 </script>

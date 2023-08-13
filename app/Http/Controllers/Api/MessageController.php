@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\NewMessage;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\MessageResource;
 use App\Http\Resources\UserResource;
+use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -15,9 +17,9 @@ class MessageController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Conversation $conversation)
     {
-        //
+        $messages = $conversation->messages();
     }
 
     /**
@@ -30,6 +32,8 @@ class MessageController extends Controller
             'receiver_id' => $request->receiver_id,
             'body' => $request->body
         ]);
+
+        NewMessage::dispatch($message);
 
         return response()->json(MessageResource::make($message));
     }
