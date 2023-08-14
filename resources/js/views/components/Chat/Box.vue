@@ -11,6 +11,12 @@
 
             </li>
         </ul>
+        <hr>
+
+        <div>
+            <input v-model="message" placeholder="Type your message..." />
+            <button @click="sendMessage">Send</button>
+        </div>
     </div>
 </template>
 
@@ -18,19 +24,27 @@
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import Message from './Message.vue';
+import MessageInput from './Input.vue';
+// import Echo from 'laravel-echo';
 
 export default {
     components: {
-        Message
+        Message,
+        MessageInput,
     },
     data() {
         return {
             route: useRoute(),
-            messages: []
+            messages: [],
+            message: ''
         };
     },
-    created() {
+    mounted() {
+        this.listen();
         this.getMessages();
+    },
+    created() {
+
     },
     methods: {
         async getMessages() {
@@ -40,10 +54,48 @@ export default {
             } catch (error) {
                 console.error('Error fetching messages:', error);
             }
+        },
+        async sendMessage() {
+            try {
+                const response = await axios.post('/api/messages', {
+                    conversation_id: '1',
+                    body: this.message,
+                });
+                this.message = '';
+                // console.log(Echo.channel('converstions')
+                //     .listen('NewMessage', () => {
+                //         console.log('zeb');
+                //         // this.messages.unshift(message);
+                //     })
+                // )
+                Echo.private('converstions.1')
+                    .listen('NewMessage', () => {
+                        console.log('zeb');
+                        // this.messages.unshift(message);
+                    })
+
+                console.log('Message sent:', response.data);
+            } catch (error) {
+                console.error('Error sending message:', error);
+            }
+        },
+        listen() {
+            try {
+                Echo.channel('converstions')
+                    .listen('NewMessage', () => {
+                        console.log('zeb');
+                        // this.messages.unshift(message);
+                    })
+            } catch (error) {
+                console.error('Error sending message:', error);
+            }
+
         }
     },
     watch: {
         '$route.params.conversationId': 'getMessages'
-    }
+    },
+
+
 };
 </script>

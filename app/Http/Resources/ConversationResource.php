@@ -18,6 +18,7 @@ class ConversationResource extends JsonResource
         return [
             'id' => $this->id,
             'topic' => $this->topic,
+            'participants' => UserResource::collection($this->users()->get()),
             'messages' => MessageResource::collection($this->messages),
         ];
     }

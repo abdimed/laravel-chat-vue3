@@ -21,7 +21,7 @@ class NewMessage implements ShouldBroadcast
      */
     public function __construct(Message $message)
     {
-       $this->message = $message;
+        $this->message = $message;
     }
 
     /**
@@ -32,12 +32,12 @@ class NewMessage implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('conversations.'.$this->message->conversation->id),
+            new PrivateChannel('conversations.' . $this->message->conversation->id),
         ];
     }
 
     public function broadcastWith(): array
-{
-    return ['body' => $this->message->body];
-}
+    {
+        return ['body' => $this->message->body];
+    }
 }

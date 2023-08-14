@@ -28,14 +28,14 @@ class MessageController extends Controller
     public function store(Request $request)
     {
         $message = Message::create([
-            'sender_id' => Auth::id(),
-            'receiver_id' => $request->receiver_id,
+            'user_id' => Auth::id(),
+            'conversation_id' => $request->conversation_id,
             'body' => $request->body
         ]);
 
         NewMessage::dispatch($message);
 
-        return response()->json(MessageResource::make($message));
+        // return response()->json(MessageResource::make($message));
     }
 
     /**
