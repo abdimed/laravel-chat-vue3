@@ -35,7 +35,7 @@ class MessageController extends Controller
 
         NewMessage::dispatch($message);
 
-        // return response()->json(MessageResource::make($message));
+        return response()->json('success', 201);
     }
 
     /**

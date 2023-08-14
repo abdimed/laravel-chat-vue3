@@ -24,30 +24,41 @@
     </div>
 </template>
 
-<script setup>
+
+<script>
 import { ref } from 'vue';
-import axios from 'axios';
+// import axios from 'axios';
 import { useRouter } from 'vue-router';
 
-const email = ref('');
-const password = ref('');
-const router = useRouter();
+export default {
+    setup() {
+        const email = ref('');
+        const password = ref('');
+        const router = useRouter();
 
-const login = async () => {
-    try {
+        const login = async () => {
+            try {
+                // Get CSRF token
+                await axios.get('/sanctum/csrf-cookie');
 
-        await axios.get('/sanctum/csrf-cookie');
+                // Login request
+                await axios.post('/api/login', {
+                    email: email.value,
+                    password: password.value,
+                });
 
-        await axios.post('/api/login', {
-            email: email.value,
-            password: password.value,
-        });
+                await router.push({ name: 'messages' });
 
-        await router.push({ name: 'messages' });
+            } catch (error) {
+                console.error('Login failed:', error);
+            }
+        };
 
-    } catch (error) {
-        console.error('Login failed:', error);
-    }
+        return {
+            email,
+            password,
+            login,
+        };
+    },
 };
-
 </script>
