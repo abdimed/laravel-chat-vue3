@@ -25,7 +25,6 @@ use Illuminate\Support\Facades\Broadcast;
 
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
-
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::apiResource('conversations', ConversationController::class)->middleware('auth:sanctum');

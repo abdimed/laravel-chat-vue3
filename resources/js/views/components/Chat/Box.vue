@@ -1,7 +1,7 @@
 <template>
     <div class="bg-gray-200 h-full w-full">
         <span class="bg-blue-500 w-full block text-white">
-            {{ conversationId }}
+            {{ route.params.conversationId }}
         </span>
 
         <ul class="flex flex-col gap-10 h-5/6 overflow-y-scroll py-2">
@@ -24,14 +24,13 @@ import { ref, watch, onMounted } from "vue";
 import Message from "./Message.vue";
 
 const route = useRoute();
-const conversationId = ref("");
 const messages = ref([]);
 const newMessage = ref("");
 
 const getMessages = async () => {
     try {
         const response = await axios.get(
-            `/api/conversations/${conversationId.value}`
+            `/api/conversations/${route.params.conversationId}`
         );
         messages.value = response.data.messages;
     } catch (error) {
@@ -40,38 +39,30 @@ const getMessages = async () => {
 };
 
 const sendNewMessage = async () => {
-    try {
-        const response = await axios.post("/api/messages", {
-            conversation_id: conversationId.value,
-            body: newMessage.value,
-        });
-        newMessage.value = "";
-        console.log("Message sent:", response.data);
-    } catch (error) {
-        console.error("Error sending message:", error);
-    }
+    const response = await axios.post("/api/messages", {
+        conversation_id: route.params.conversationId,
+        body: newMessage.value,
+    });
+
+    newMessage.value = "";
 };
 
 const listen = async () => {
-    await Echo.channel(`conversations.${conversationId.value}`).listen(
-        ".NewMessage",
-        (e) => {
-            console.log("zeb");
-        }
-    );
+    await Echo.private(`messages`).listen("NewMessage", (message) => {
+       console.log(message)
+    });
 };
 
 watch(
     () => route.params.conversationId,
     () => {
-        conversationId.value = route.params.conversationId;
-        // getMessages();
+        // listen();
+        getMessages();
     }
 );
 
 onMounted(() => {
     listen();
-    conversationId.value = route.params.conversationId;
     getMessages();
 });
 </script>

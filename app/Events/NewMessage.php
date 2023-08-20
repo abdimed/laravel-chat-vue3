@@ -12,7 +12,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewMessage implements ShouldBroadcastNow
+class NewMessage implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -32,13 +32,15 @@ class NewMessage implements ShouldBroadcastNow
      */
     public function broadcastOn(): Channel
     {
-        return new Channel('conversations.' . $this->message->conversation->id);
-
+        return new PrivateChannel('messages');
     }
 
     public function broadcastWith(): array
     {
-        return ['body' => $this->message->body];
+        return [
+            'user' => $this->message->user->id,
+            'body' => $this->message->body
+        ];
     }
 
     // public function broadcastAs()
