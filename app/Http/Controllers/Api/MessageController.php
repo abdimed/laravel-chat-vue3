@@ -20,6 +20,7 @@ class MessageController extends Controller
     public function index(Conversation $conversation)
     {
         $messages = $conversation->messages();
+        return response()->json($messages);
     }
 
     /**

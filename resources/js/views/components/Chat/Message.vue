@@ -1,18 +1,19 @@
-
 <template>
-    <div class="flex items-center">
+    <div class="flex items-center" :dir="message.user.current ? 'rtl' : 'ltr'">
         <div>
-            <p>{{ message.user.email }}</p>
-
+            <p>{{ message.user.name }}</p>
         </div>
-        <div class="rounded-full p-4 w-fit" :class="{ 'bg-blue-500': message.user.current }">
+
+        <div
+            class="rounded-full p-4 w-fit"
+            :class="message.user.current ? 'bg-darkgray text-white' : 'bg-lightgray'"
+        >
             <p>{{ message.body }}</p>
         </div>
     </div>
 </template>
 
 <script setup>
-
 const props = defineProps({
     message: Object,
 });

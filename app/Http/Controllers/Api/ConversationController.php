@@ -35,6 +35,7 @@ class ConversationController extends Controller
     public function show(string $id)
     {
         $conversation = ConversationResource::make(Conversation::findOrFail($id));
+
         return response()->json($conversation);
     }
 

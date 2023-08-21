@@ -1,13 +1,13 @@
 <template>
     <div class="flex">
 
-        <aside class="w-1/6 min-h-screen bg-blue-500 text-white flex flex-col p-4 font-semibold gap-4">
+        <aside class="w-1/6 min-h-screen flex flex-col font-semibold gap-4 border-r border-black">
 
             <conversations-list></conversations-list>
 
         </aside>
 
-        <main class="w-5/6 h-screen">
+        <main class="w-5/6 h-screen flex flex-col">
             <router-view />
         </main>
 

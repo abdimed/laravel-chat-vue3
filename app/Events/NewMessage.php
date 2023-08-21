@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Http\Resources\UserResource;
 use App\Models\Message;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -30,15 +31,17 @@ class NewMessage implements ShouldBroadcast
      *
      * @return array<int, \Illuminate\Broadcasting\Channel>
      */
-    public function broadcastOn(): Channel
-    {
-        return new PrivateChannel('messages');
-    }
-
-    public function broadcastWith(): array
+    public function broadcastOn(): array
     {
         return [
-            'user' => $this->message->user->id,
+            new PrivateChannel('messages'),
+        ];
+    }
+
+    public function broadcastWith()
+    {
+        return [
+            'user' => UserResource::make($this->message->user),
             'body' => $this->message->body
         ];
     }

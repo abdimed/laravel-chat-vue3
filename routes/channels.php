@@ -1,8 +1,5 @@
 <?php
 
-use App\Models\Conversation;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Broadcast;
 
 /*
