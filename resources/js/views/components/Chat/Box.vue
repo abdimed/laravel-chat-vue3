@@ -1,5 +1,5 @@
 <template>
-    <h2 class="w-full block m-4 p-2">
+    <h2 class="w-full block mx-4 p-2">
         {{ topic }}
     </h2>
     <div
@@ -13,7 +13,7 @@
                 <Message :message="message" />
             </li>
         </ul>
-        <div v-else class="flex-1 bg-black">
+        <div v-else class="flex-1 bg-lightgray animate-pulse">
 
         </div>
         <div class="flex space-x-5 py-2">
@@ -40,6 +40,7 @@ const topic = ref("");
 
 const getMessages = async () => {
     try {
+        messages.value = [];
         const response = await axios.get(
             `/api/conversations/${route.params.conversationId}`
         );
