@@ -17,6 +17,6 @@
 
 <script setup>
 
-import ConversationsList from './components/Conversations/List.vue'
+import ConversationsList from '../components/Conversations/List.vue'
 
 </script>

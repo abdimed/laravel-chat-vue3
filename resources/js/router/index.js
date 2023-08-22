@@ -1,10 +1,10 @@
 import { createWebHistory, createRouter } from "vue-router";
 
-import App from '../views/templates/App.vue';
+import Register from "../views/Register.vue";
 import Login from "../views/Login.vue";
 import Messages from "../views/Messages.vue";
-import Conversation from "../views/components/Chat/Box.vue";
-import Register from "../views/pages/Register.vue";
+import Conversation from "../components/Conversations/Chat.vue";
+
 
 const routes = [
     {
@@ -17,7 +17,6 @@ const routes = [
         name: "login",
         component: Login
     },
-
     {
         path: "/messages",
         name: "messages",

@@ -45,11 +45,11 @@ export default {
         const password = ref('');
         const confirmPassword = ref('');
 
-        const register = () => {
-            // Get CSRF token
-            axios.get('/sanctum/csrf-cookie');
-            axios.post('/api/register')
-        };
+        // const register = () => {
+        //     // Get CSRF token
+        //     axios.get('/sanctum/csrf-cookie');
+        //     axios.post('/api/register')
+        // };
 
         return {
             name,
