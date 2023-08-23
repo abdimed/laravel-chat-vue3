@@ -1,7 +1,7 @@
 <template>
     <div class="flex">
 
-        <aside class="w-1/6 min-h-screen flex flex-col font-semibold gap-4 border-r">
+        <aside class="w-1/6 min-h-screen flex flex-col font-semibold gap-4 border-r border-darkgray">
 
             <conversations-list></conversations-list>
 

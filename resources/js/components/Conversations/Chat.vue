@@ -4,7 +4,7 @@
   </h2>
 
   <div
-    class="flex-1 overflow-y-auto p-2 border rounded-xl m-4 flex flex-col"
+    class="flex-1 overflow-y-auto p-2 border border-darkgray rounded-xl m-4 flex flex-col"
   >
     <ul
       v-if="messages.length > 0"

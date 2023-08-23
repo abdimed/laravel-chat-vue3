@@ -7,7 +7,7 @@
       </ul>
       <ul>
         <li v-for="conversation in conversations" :key="conversation.id">
-          <router-link :to="`/messages/${conversation.id}`" class="block py-5 border-b  px-4">
+          <router-link :to="`/messages/${conversation.id}`" class="block py-5 hover:animate-pulse px-4">
             {{ conversation.topic }}
           </router-link>
         </li>
