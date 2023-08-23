@@ -25,7 +25,8 @@ const routes = [
             {
                 path: ':conversationId',
                 name: "conversation",
-                component: Conversation
+                component: Conversation,
+
             }
         ]
     },

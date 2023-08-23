@@ -21,5 +21,5 @@ use Illuminate\Support\Facades\Broadcast;
 // });
 
 Broadcast::channel('conversation.{conversationId}', function (User $user, int $conversationId) {
-    return Conversation::find($conversationId)->id === $user->conversations()->where('cnversation_id', $conversationId)->first()->id;
+    return Conversation::find($conversationId)->id === $user->conversations()->where('conversation_id', $conversationId)->first()->id;
 });
