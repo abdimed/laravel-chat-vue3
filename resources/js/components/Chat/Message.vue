@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-end" :dir="message.user.current ? 'rtl' : 'ltr'">
+    <div class="flex items-end gap-x-2" :dir="message.user.current ? 'rtl' : 'ltr'">
 
         <img :src="`https://ui-avatars.com/api/?rounded=true&size=40&name=${encodeURIComponent(message.user.name)}`"  alt="">
 

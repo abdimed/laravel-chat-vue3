@@ -4,7 +4,7 @@
   </h2>
 
   <div
-    class="flex-1 overflow-y-auto p-2 border border-black rounded-xl m-4 flex flex-col"
+    class="flex-1 overflow-y-auto p-2 border rounded-xl m-4 flex flex-col"
   >
     <ul
       v-if="messages.length > 0"
@@ -45,6 +45,7 @@ const getMessages = async () => {
 };
 
 const listen = async () => {
+
   await Echo.private(`conversation.${route.params.conversationId}`).listen(
     "NewMessage",
     (message) => {
