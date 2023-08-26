@@ -4,7 +4,7 @@
         <img :src="`https://ui-avatars.com/api/?rounded=true&size=40&name=${encodeURIComponent(message.user.name)}`"  alt="">
 
         <div class="rounded-lg p-2 max-w-lg relative"
-            :class="message.user.current ? 'bg-emerald-400 text-white' : 'bg-lightgray dark:bg-darkgray'">
+            :class="message.user.current ? 'bg-blue-500 text-white' : 'bg-lightgray dark:bg-darkgray'">
             <p>{{ message.body }}</p>
 
         </div>

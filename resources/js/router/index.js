@@ -4,7 +4,7 @@ import Register from "../views/Register.vue";
 import Login from "../views/Login.vue";
 import Messages from "../views/Messages.vue";
 import Conversation from "../components/Conversations/Chat.vue";
-
+import axios from "axios";
 
 const routes = [
     {
@@ -30,6 +30,12 @@ const routes = [
             }
         ]
     },
+
+    {
+        path: '/:pathMatch(.*)*',
+        name: '404',
+        component: () => import('../views/404.vue')
+    }
 
 
 
