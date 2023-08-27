@@ -29,6 +29,8 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::post('/register', [AuthController::class, 'register']);
 
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');;
+
 Route::apiResource('conversations', ConversationController::class)->middleware('auth:sanctum');
 
 Route::apiResource('messages', MessageController::class)->middleware('auth:sanctum');

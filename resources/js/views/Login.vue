@@ -4,18 +4,38 @@
             <h2 class="text-2xl font-semibold mb-4">Login</h2>
             <form @submit.prevent="login">
                 <div class="mb-4">
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email:</label>
-                    <input type="email" id="email" v-model="email" required
-                        class="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300" />
+                    <label
+                        for="email"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Email:</label
+                    >
+                    <input
+                        type="email"
+                        id="email"
+                        v-model="email"
+                        required
+                        class="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300"
+                    />
                 </div>
                 <div class="mb-6">
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password:</label>
-                    <input type="password" id="password" v-model="password" required
-                        class="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300" />
+                    <label
+                        for="password"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Password:</label
+                    >
+                    <input
+                        type="password"
+                        id="password"
+                        v-model="password"
+                        required
+                        class="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300"
+                    />
                 </div>
                 <div>
-                    <button type="submit"
-                        class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring focus:ring-blue-300">
+                    <button
+                        type="submit"
+                        class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring focus:ring-blue-300"
+                    >
                         Login
                     </button>
                 </div>
@@ -24,41 +44,34 @@
     </div>
 </template>
 
+<script setup>
+import axios from "axios";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
-<script>
-import { ref } from 'vue';
-// import axios from 'axios';
-import { useRouter } from 'vue-router';
+const store = useStore();
+const email = ref("");
+const password = ref("");
+const router = useRouter();
 
-export default {
-    setup() {
-        const email = ref('');
-        const password = ref('');
-        const router = useRouter();
+const login = async () => {
+    try {
+        await axios.get("/sanctum/csrf-cookie");
 
-        const login = async () => {
-            try {
-                // Get CSRF token
-                await axios.get('/sanctum/csrf-cookie');
+        const response = await axios.post("/api/login", {
+            headers: {
+                Accept: " application/json",
+            },
+            email: email.value,
+            password: password.value,
+        });
 
-                // Login request
-                await axios.post('/api/login', {
-                    email: email.value,
-                    password: password.value,
-                });
+        store.commit("auth/setAuthToken", response.data.token);
 
-                await router.push({ name: 'messages' });
+        await router.push({ name: "messages" });
 
-            } catch (error) {
-                console.error('Login failed:', error);
-            }
-        };
-
-        return {
-            email,
-            password,
-            login,
-        };
-    },
+    } catch (error) {
+        console.error("Login failed:", error);
+    }
 };
 </script>

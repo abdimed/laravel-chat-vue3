@@ -8,6 +8,8 @@
 </template>
 
 <script setup>
+import api from '@/api'
+
 const props = defineProps({
     conversationId: String,
 });
@@ -15,7 +17,7 @@ import { ref } from "vue";
 const message = ref("");
 
 const sendMessage = async () => {
-    await axios.post("/api/messages", {
+    await api.post("/messages", {
         conversation_id: props.conversationId,
         body: message.value,
     });
