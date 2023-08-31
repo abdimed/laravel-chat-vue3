@@ -1,21 +1,16 @@
 <template>
-    <div>
-        <ul>
-            <li v-for="user in users" :key="user.id">
-                {{ user.name }}
-            </li>
-        </ul>
-        <ul>
-            <li v-for="conversation in conversations" :key="conversation.id">
-                <router-link
-                    :to="`/messages/${conversation.id}`"
-                    class="block py-5 hover:animate-pulse px-4"
-                >
-                    {{ conversation.topic }}
-                </router-link>
-            </li>
-        </ul>
-    </div>
+    <ul>
+        <li v-for="user in users" :key="user.id">
+            {{ user.name }}
+        </li>
+    </ul>
+    <ul class="px-2">
+        <li v-for="conversation in conversations" :key="conversation.id">
+            <router-link :to="`/messages/${conversation.id}`" class="block py-5 hover:animate-pulse px-4 rounded-xl">
+                {{ conversation.topic }}
+            </router-link>
+        </li>
+    </ul>
 </template>
 
 <script setup>
@@ -38,7 +33,6 @@ const getUsers = async () => {
 };
 
 const getConversations = async () => {
-    console.log(isAuthenticated.value);
     if (isAuthenticated.value) {
         try {
             const response = await api.get('/conversations');
@@ -49,8 +43,14 @@ const getConversations = async () => {
     }
 };
 
+const createConversation = async () => {
+    const response = await api.post('/conversations');
+}
+
 onMounted(() => {
     getUsers();
     getConversations();
 });
+
+
 </script>

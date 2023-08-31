@@ -9,9 +9,11 @@ export default {
     theme: {
         extend: {
             colors: {
-                iblack: '#101010',
-                darkgray: '#848e98',
-                lightgray: '#e7e6e9',
+                primary: '#e0fbd8',
+                secondary: '#d4e2f7',
+                success: '#848e98',
+                warning: '#e7e6e9',
+                danger : '#0000'
 
             }
         },

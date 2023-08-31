@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center justify-center min-h-screen w-full bg-black">
+    <div class="flex items-center justify-center min-h-screen w-full">
         <div class="bg-white p-8 rounded-lg shadow-md w-full sm:w-96">
             <h2 class="text-2xl font-semibold mb-4">Login</h2>
             <form @submit.prevent="login">
@@ -46,6 +46,7 @@
 
 <script setup>
 import axios from "axios";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 

@@ -56,8 +56,3 @@ window.Echo = new Echo({
         };
     },
 });
-
-
-// window.Echo.channel(`conversations`).listen('.NewMessage', (e) => {
-//     console.log(e);
-// });
