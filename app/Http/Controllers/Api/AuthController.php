@@ -33,21 +33,30 @@ class AuthController extends Controller
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        $token = $user->createToken('api-token')->plainTextToken;
+        $authToken = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
             'user' => UserResource::make($user),
-            'token' => $token,
+            'authToken' => $authToken,
         ]);
 
     }
 
     public function logout(Request $request)
     {
+        $user = Auth::user();
 
+        if ($user) {
+            // Revoke all of the user's tokens
+            $user->tokens->each(function ($token) {
+                $token->delete();
+            });
 
-        Auth::user()->tokens()->delete();
+            // Optionally, you can clear any user-related data or perform additional cleanup
 
-        return response()->json('logged out');
+            return response()->json(['message' => 'Logged out successfully']);
+        }
+
+        return response()->json(['message' => 'User not found'], 404);
     }
 }

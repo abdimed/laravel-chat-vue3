@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Http\Resources\MessageResource;
 use App\Http\Resources\UserResource;
 use App\Models\Message;
 use Illuminate\Broadcasting\Channel;
@@ -41,8 +42,8 @@ class NewMessage implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'user' => UserResource::make($this->message->user),
-            'body' => $this->message->body
+            'body' => $this->message->body,
+            'user' => $this->message->user->name
         ];
     }
 

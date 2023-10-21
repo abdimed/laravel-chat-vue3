@@ -49,8 +49,4 @@ class UserController extends Controller
         //
     }
 
-    public function getCurrentUser()
-    {
-        return response()->json(UserResource::make(auth()->user()));
-    }
 }

@@ -1,10 +1,10 @@
 <template>
-    <div class="flex items-end gap-x-2" :dir="message.user.current ? 'rtl' : 'ltr'">
+    <div class="flex items-end gap-x-2" :dir="message.current ? 'rtl' : 'ltr'">
 
-        <img :src="`https://ui-avatars.com/api/?rounded=true&size=40&name=${encodeURIComponent(message.user.name)}`"  alt="">
+        <img :src="`https://ui-avatars.com/api/?rounded=true&size=40&name=${encodeURIComponent(message.user)}`"  alt="{{ message.user }}" />
 
-        <div class="rounded-lg p-2 max-w-lg relative"
-            :class="message.user.current ? 'bg-secondary text-black' : 'bg-gray-200 dark:bg-darkgray'">
+        <div class="rounded-lg p-2 max-w-lg relative">
+
             <p>{{ message.body }}</p>
 
         </div>

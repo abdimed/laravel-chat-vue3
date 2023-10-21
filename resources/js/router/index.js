@@ -4,7 +4,7 @@ import Register from "../views/Register.vue";
 import Login from "../views/Login.vue";
 import Messages from "../views/Messages.vue";
 import Conversation from "../components/Conversations/Chat.vue";
-import axios from "axios";
+
 
 const routes = [
     {
@@ -21,6 +21,7 @@ const routes = [
         path: "/messages",
         name: "messages",
         component: Messages,
+        meta: { requiresAuth: true },
         children: [
             {
                 path: ':conversationId',
@@ -38,13 +39,20 @@ const routes = [
     }
 
 
-
 ];
 
 const router = createRouter({
     history: createWebHistory(),
     linkActiveClass: 'bg-primary dark:bg-darkgray',
     routes
+});
+
+router.beforeEach((to, from, next) => {
+    if (to.meta.requiresAuth && !localStorage.getItem('authToken')) {
+        next('/login');
+    } else {
+        next();
+    }
 });
 
 export default router;

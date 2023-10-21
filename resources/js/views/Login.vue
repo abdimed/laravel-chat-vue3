@@ -2,7 +2,7 @@
     <div class="flex items-center justify-center min-h-screen w-full">
         <div class="bg-white p-8 rounded-lg shadow-md w-full sm:w-96">
             <h2 class="text-2xl font-semibold mb-4">Login</h2>
-            <form @submit.prevent="login">
+            <form @submit.prevent="performLogin">
                 <div class="mb-4">
                     <label
                         for="email"
@@ -40,37 +40,41 @@
                     </button>
                 </div>
             </form>
+            <!-- Display login error message if loginError is not empty -->
+            <div v-if="loginError" class="text-red-500 mt-4">
+                {{ loginError }}
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import axios from "axios";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { ref, onBeforeMount } from "vue";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 const store = useStore();
 const email = ref("");
 const password = ref("");
 const router = useRouter();
+const loginError = ref(null); // Initialize loginError as null
 
-const login = async () => {
+onBeforeMount(() => {
+    if (store.getters["auth/isAuthenticated"]) {
+        router.push({ name: "messages" });
+    }
+});
+
+const performLogin = async () => {
     try {
         await axios.get("/sanctum/csrf-cookie");
 
-        const response = await axios.post("/api/login", {
-            headers: {
-                Accept: " application/json",
-            },
+        await store.dispatch("auth/login", {
             email: email.value,
             password: password.value,
         });
 
-        store.commit("auth/setAuthToken", response.data.token);
-
-        await router.push({ name: "messages" });
-
+        router.push("/messages");
     } catch (error) {
         console.error("Login failed:", error);
     }

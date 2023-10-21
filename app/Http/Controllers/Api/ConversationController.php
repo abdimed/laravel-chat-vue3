@@ -18,6 +18,7 @@ class ConversationController extends Controller
     public function index()
     {
         $conversations = ConversationResource::collection(Auth::user()->conversations);
+
         return response()->json($conversations);
     }
 

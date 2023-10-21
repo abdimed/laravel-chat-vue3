@@ -12,6 +12,7 @@ if (storedToken) {
   store.commit('auth/setAuthToken', storedToken);
 }
 
+
 createApp(App)
     .use(router)
     .use(store)

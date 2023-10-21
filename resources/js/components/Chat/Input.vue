@@ -1,8 +1,8 @@
 <template>
     <form @submit.prevent="sendMessage" class="flex space-x-5 py-2">
-        <textarea v-model="message" placeholder="Type your message..."
-            class="w-full p-2 focus:outline-none border border-darkgray rounded-lg bg-gray-200 h-fit dark:bg-iblack/50 resize-none">
-    </textarea>
+        <input v-model="message" placeholder="Type your message..."
+            class="w-full p-2 focus:outline-none border border-darkgray rounded-lg bg-gray-200 h-fit dark:bg-iblack/50 resize-none" />
+
         <button type="submit">Send</button>
     </form>
 </template>
