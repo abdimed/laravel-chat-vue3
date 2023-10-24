@@ -4,16 +4,17 @@
     </h2>
 
     <div
-        class="flex-1 overflow-y-auto p-2 border border-darkgray rounded-xl m-4 flex flex-col">
+        class="flex-1 overflow-y-auto p-2 border border-darkgray rounded-xl m-4 flex flex-col"
+    >
         <ul
-            v-if="messages.length > 0"
-            class="flex flex-col gap-10 h-full overflow-y-scroll px-2 py-10">
+            class="h-full flex flex-col gap-10 overflow-y-scroll px-2 py-10"
+            ref="messageList"
+            @scroll="loadMoreMessages"
+        >
             <li v-for="message in messages" :key="message.id">
-                <Message :message="message" />
+                <Message :message="message" :authUser="authUser" />
             </li>
         </ul>
-
-        <div v-else class="flex-1 bg-lightgray animate-pulse"></div>
 
         <chat-input :conversationId="route.params.conversationId"></chat-input>
     </div>
@@ -25,26 +26,45 @@ import { ref, watch, onMounted } from "vue";
 import Message from "../Chat/Message.vue";
 import ChatInput from "../Chat/Input.vue";
 import api from "@/api";
+import { useAuthUser } from "@/composables/useAuthUser";
 
 const route = useRoute();
 const messages = ref([]);
-
 const topic = ref("");
+const messageList = ref(null);
+const currentPage = ref(1);
+
+const { authUser, getAuthUser } = useAuthUser();
 
 const getMessages = async () => {
     try {
-        // messages.value = [];
         const response = await api.get(
             `/conversations/${route.params.conversationId}`
         );
-        messages.value = response.data.messages;
+        messages.value = response.data.messages.data.slice().reverse();
         topic.value = response.data.topic;
     } catch (error) {
         console.error("Error fetching messages:", error);
     }
 };
 
-const listen = async () => {
+//Improve this logic
+async function loadMoreMessages() {
+    if (messageList.value.scrollTop === 0) {
+        currentPage.value++;
+        try {
+            const response = await api.get(
+                `/conversations/${route.params.conversationId}?page=${currentPage.value}`
+            );
+            const newMessages = response.data.messages.data.slice().reverse();
+            messages.value = [...newMessages, ...messages.value];
+        } catch (error) {
+            console.error("Error fetching more messages:", error);
+        }
+    }
+}
+
+async function listen() {
     await Echo.private(`conversation.${route.params.conversationId}`).listen(
         "NewMessage",
         (message) => {
@@ -52,12 +72,20 @@ const listen = async () => {
             console.log(message);
         }
     );
-};
+}
 
 onMounted(() => {
-    listen();
     getMessages();
+    listen();
+    scrollToBottom();
+    getAuthUser();
 });
+
+const scrollToBottom = () => {
+    messageList.value.scrollTop = messageList.value.scrollHeight;
+    console.log(messageList.value.scrollTop);
+    console.log(messageList.value.scrollHeight);
+};
 
 watch(
     () => route.params,

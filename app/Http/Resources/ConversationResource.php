@@ -18,8 +18,7 @@ class ConversationResource extends JsonResource
         return [
             'id' => $this->id,
             'topic' => $this->topic,
-            'participants' => UserResource::collection($this->users()->get()),
-            'messages' => MessageResource::collection($this->messages),
-        ];
+            'participants' => UserResource::collection($this->users),
+            'messages' => MessagesCollection::make($this->messages()->orderBy('created_at', 'desc')->paginate(10)),];
     }
 }

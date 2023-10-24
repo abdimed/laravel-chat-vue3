@@ -13,6 +13,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
 
 class NewMessage implements ShouldBroadcast
 {
@@ -43,7 +44,10 @@ class NewMessage implements ShouldBroadcast
     {
         return [
             'body' => $this->message->body,
-            'user' => $this->message->user->name
+            'user' => [
+                'name' => $this->message->user->name,
+                'id' => $this->message->user->id,
+            ]
         ];
     }
 

@@ -1,20 +1,27 @@
 <template>
     <form @submit.prevent="sendMessage" class="flex space-x-5 py-2">
-        <input v-model="message" placeholder="Type your message..."
-            class="w-full p-2 focus:outline-none border border-darkgray rounded-lg bg-gray-200 h-fit dark:bg-iblack/50 resize-none" />
+        <input
+            v-model="message"
+            ref="input"
+            placeholder="Type your message..."
+            class="w-full p-2 focus:outline-none border border-darkgray rounded-lg bg-gray-200 h-fit dark:bg-iblack/50 resize-none"
+        />
 
         <button type="submit">Send</button>
     </form>
 </template>
 
 <script setup>
-import api from '@/api'
+import api from "@/api";
+import { ref, onMounted } from "vue";
+
+const message = ref("");
+
+const input = ref(null);
 
 const props = defineProps({
     conversationId: String,
 });
-import { ref } from "vue";
-const message = ref("");
 
 const sendMessage = async () => {
     await api.post("/messages", {
@@ -23,4 +30,8 @@ const sendMessage = async () => {
     });
     message.value = "";
 };
+
+onMounted(() => {
+    input.value.focus();
+});
 </script>
