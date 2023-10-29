@@ -5,6 +5,7 @@ export default {
     namespaced: true,
     state: {
         authToken: null,
+        user: null,
     },
     mutations: {
         setAuthToken(state, token) {
@@ -13,16 +14,36 @@ export default {
         },
         clearAuthToken(state) {
             state.authToken = null;
+            state.user = null;
             localStorage.removeItem('authToken')
+        },
+        setUser(state, user) {
+            state.user = user;
         },
     },
     getters: {
-        isAuthenticated: (state) => {
-            return state.authToken !== null;
+        isAuthenticated: async (state) => {
+            try {
+                const response = await api.get('/user');
+
+                if (response.status === 200) {
+
+                    return true;
+                } else if (response.status === 401 && state.authToken !== null) {
+
+                }
+            } catch (error) {
+                console.log('Authentication error', error);
+            }
+
+            return false;
         },
         token: (state) => {
             return state.authToken;
-        }
+        },
+        user: (state) => {
+            return state.user;
+        },
     },
     actions: {
         async login({ commit }, credentials) {
@@ -35,8 +56,10 @@ export default {
                 });
 
                 const authToken = response.data.authToken;
+                const user = response.data.user;
 
                 commit('setAuthToken', authToken);
+                commit('setUser', user);
 
                 router.push('/messages');
 

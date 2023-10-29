@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ConversationController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Broadcast;
 
@@ -38,6 +39,7 @@ Route::apiResource('messages', MessageController::class)->middleware('auth:sanct
 
 Route::apiResource('users', UserController::class);
 
-Route::get('/user/current', function () {
-    return Auth::id();
-})->middleware('auth:sanctum');
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return response()->json(new UserResource($request->user())) ;
+});
+

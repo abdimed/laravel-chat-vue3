@@ -27,7 +27,11 @@ class ConversationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $conversation = Conversation::create([
+            'topic' => $request->topic,
+        ]);
+        $participants = [Auth::id(), $request->input('participants')];
+        $conversation->users()->attach($participants);
     }
 
     /**

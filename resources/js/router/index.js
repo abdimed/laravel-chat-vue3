@@ -1,10 +1,10 @@
 import { createWebHistory, createRouter } from "vue-router";
+import store from "../store";
 
 import Register from "../views/Register.vue";
 import Login from "../views/Login.vue";
 import Messages from "../views/Messages.vue";
 import Conversation from "../components/Conversations/Chat.vue";
-
 
 const routes = [
     {
@@ -15,7 +15,7 @@ const routes = [
     {
         path: '/login',
         name: "login",
-        component: Login
+        component: Login,
     },
     {
         path: "/messages",
@@ -38,23 +38,23 @@ const routes = [
         component: () => import('../views/404.vue')
     }
 
-
 ];
 
 const router = createRouter({
     history: createWebHistory(),
-    linkActiveClass: 'bg-primary dark:bg-darkgray',
+    linkActiveClass: 'bg-primary dark:bg-slate-700',
     routes
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.meta.requiresAuth && !localStorage.getItem('authToken')) {
+
+    const isAuthenticated = store.getters['auth/isAuthenticated'];
+
+    if (to.meta.requiresAuth && !isAuthenticated) {
         next('/login');
-    } else {
-        next();
-    }
+    } else if (to.name === 'login' && isAuthenticated) {
+        next('/messages');
+    } else next();
 });
-
-
 
 export default router;

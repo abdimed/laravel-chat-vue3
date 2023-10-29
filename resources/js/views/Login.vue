@@ -40,16 +40,17 @@
                     </button>
                 </div>
             </form>
-            <!-- Display login error message if loginError is not empty -->
+
             <div v-if="loginError" class="text-red-500 mt-4">
                 {{ loginError }}
             </div>
+
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from "vue";
+import { ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 
@@ -57,15 +58,11 @@ const store = useStore();
 const email = ref("");
 const password = ref("");
 const router = useRouter();
-const loginError = ref(null); // Initialize loginError as null
+const loginError = ref(null);
 
-onBeforeMount(() => {
-    if (store.getters["auth/isAuthenticated"]) {
-        router.push({ name: "messages" });
-    }
-});
 
 const performLogin = async () => {
+
     try {
         await axios.get("/sanctum/csrf-cookie");
 
@@ -75,6 +72,7 @@ const performLogin = async () => {
         });
 
         router.push("/messages");
+
     } catch (error) {
         console.error("Login failed:", error);
     }

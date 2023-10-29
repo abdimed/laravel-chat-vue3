@@ -4,7 +4,7 @@
             v-model="message"
             ref="input"
             placeholder="Type your message..."
-            class="w-full p-2 focus:outline-none border border-darkgray rounded-lg bg-gray-200 h-fit dark:bg-iblack/50 resize-none"
+            class="w-full p-2 focus:outline-none border dark:border-none rounded-lg bg-gray-200 dark:bg-slate-800 h-fit dark:bg-iblack/50 resize-none"
         />
 
         <button type="submit">Send</button>

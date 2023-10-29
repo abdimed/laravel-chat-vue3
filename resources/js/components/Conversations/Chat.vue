@@ -1,13 +1,13 @@
 <template>
-    <h2 class="w-full block mx-4 p-2">
+    <h2 class="w-full px-4 py-2">
         {{ topic }}
     </h2>
 
     <div
-        class="flex-1 overflow-y-auto p-2 border border-darkgray rounded-xl m-4 flex flex-col"
+        class="overflow-y-auto p-2 border dark:border-slate-700 rounded-xl m-4 flex flex-col h-full"
     >
         <ul
-            class="h-full flex flex-col gap-10 overflow-y-scroll px-2 py-10"
+            class="flex flex-col gap-10 overflow-y-scroll px-2 py-10"
             ref="messageList"
             @scroll="loadMoreMessages"
         >
@@ -22,31 +22,21 @@
 
 <script setup>
 import { useRoute } from "vue-router";
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted, onBeforeMount } from "vue";
 import Message from "../Chat/Message.vue";
 import ChatInput from "../Chat/Input.vue";
 import api from "@/api";
-import { useAuthUser } from "@/composables/useAuthUser";
 
-const route = useRoute();
-const messages = ref([]);
-const topic = ref("");
+import { useUsers } from "@/composables/users";
+
+import { useConversations } from "../../composables/conversations";
+
+const { authUser, getAuthUser } = useUsers();
+const { topic, messages, getMessages } = useConversations();
+
 const messageList = ref(null);
 const currentPage = ref(1);
-
-const { authUser, getAuthUser } = useAuthUser();
-
-const getMessages = async () => {
-    try {
-        const response = await api.get(
-            `/conversations/${route.params.conversationId}`
-        );
-        messages.value = response.data.messages.data.slice().reverse();
-        topic.value = response.data.topic;
-    } catch (error) {
-        console.error("Error fetching messages:", error);
-    }
-};
+const route = useRoute();
 
 //Improve this logic
 async function loadMoreMessages() {
@@ -74,11 +64,14 @@ async function listen() {
     );
 }
 
+onBeforeMount(() => {
+    getAuthUser();
+})
+
 onMounted(() => {
     getMessages();
     listen();
     scrollToBottom();
-    getAuthUser();
 });
 
 const scrollToBottom = () => {

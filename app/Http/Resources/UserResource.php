@@ -18,7 +18,6 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'current' => auth()->id() === $this->id ? true : false,
         ];
     }
 }

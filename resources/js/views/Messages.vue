@@ -1,19 +1,9 @@
 <template>
-    <nav class="flex flex-1 justify-between">
-        <div></div>
-        <button @click="performLogout">logout</button>
-    </nav>
-    <div class="flex relative">
-        <transition>
-            <aside
-                v-if="show"
-                class="w-4/5 bg-white lg:w-1/6 min-h-screen flex flex-col font-semibold gap-4 border-r border-darkgray absolute lg:relative z-50"
-            >
-                <conversations-list></conversations-list>
-            </aside>
-        </transition>
-
-        <button @click="show = !show" class="">
+        <h2>User Name: {{ user}}</h2>
+    <div
+        class="flex justify-between border-b dark:border-slate-700 py-2 px-2 w-full"
+    >
+        <button @click="show = !show" class="lg:invisible">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -29,31 +19,51 @@
                 />
             </svg>
         </button>
+        <div>
+            <span v-if="authUser"> {{ authUser.name }}</span>
 
-        <div class="w-full h-screen flex flex-col">
-            <router-view />
+            <button @click="performLogout">logout</button>
         </div>
+    </div>
+
+    <div class="flex relative h-full w-full">
+        <transition>
+            <aside
+                v-if="show"
+                class="w-4/5 bg-white lg:w-1/6 lg:h-full flex overflow-y-auto flex-col font-semibold gap-4 border-r dark:border-slate-700 absolute top-0 lg:relative z-50"
+            >
+                <conversations-list></conversations-list>
+            </aside>
+        </transition>
+
+        <main class="w-full">
+            <router-view />
+        </main>
     </div>
 </template>
 
 <script setup>
 import ConversationsList from "../components/Conversations/List.vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import { useUsers } from "../composables/users";
 
-const show = ref();
+const show = ref(true);
 const store = useStore();
 const router = useRouter();
+const { authUser, getAuthUser } = useUsers();
+
+const user = computed(() => store.state.auth.user); // Define a computed property
 
 const performLogout = async () => {
     await store.dispatch("auth/logout");
-    // router.push({ name: "login" }); // Redirect to the login page after logging out
 };
 
 onMounted(() => {
-    show.value = true;
+    getAuthUser();
 });
+
 </script>
 
 <style>
