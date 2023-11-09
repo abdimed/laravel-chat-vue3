@@ -15,10 +15,7 @@
         </form>
         <ul class="px-2">
             <li v-for="conversation in conversations" :key="conversation.id">
-                <router-link
-                    :to="`/messages/${conversation.id}`"
-                    class="block py-5 hover:animate-pulse px-4 rounded-xl"
-                >
+                <router-link :to="`/messages/${conversation.id}`" class="block py-5 hover:animate-pulse px-4 rounded-xl">
                     {{ conversation.topic }}
                 </router-link>
             </li>
@@ -32,8 +29,7 @@ import { useUsers } from "@/composables/users";
 
 const { users, getUsers } = useUsers();
 
-const { conversations, getConversations, createConversation, topic } =
-    useConversations();
+const { conversations, getConversations, createConversation, topic } = useConversations();
 
 const show = ref(false);
 
@@ -41,4 +37,5 @@ onMounted(() => {
     getUsers();
     getConversations();
 });
+
 </script>

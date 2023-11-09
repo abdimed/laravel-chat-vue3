@@ -9,6 +9,13 @@ window.axios = axios;
 
 window.axios.defaults.withCredentials = true;
 window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+window.axios.defaults.baseURL = "http://127.0.0.1:8000";
+
+
+
+import Pusher from "pusher-js";
+window.Pusher = Pusher;
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
@@ -16,10 +23,8 @@ window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
  */
 
 import Echo from "laravel-echo";
-import Pusher from "pusher-js";
 
 
-window.Pusher = Pusher;
 
 window.Echo = new Echo({
     broadcaster: "pusher",
@@ -41,13 +46,16 @@ window.Echo = new Echo({
                     channel_name: channel.name
                 }, {
                     headers: {
-                        Authorization: `Bearer ${authToken}` // Replace with your actual token
+                        Accept: 'application/json',
+                        Authorization: `Bearer ${authToken}`
                     }
                 })
                     .then(response => {
+                        console.log('Auth Response:', response.data);
                         callback(false, response.data);
                     })
                     .catch(error => {
+                        console.error('Auth Error:', error);
                         callback(true, error);
                     });
             }

@@ -1,22 +1,19 @@
 <template>
-    <h2 class="w-full px-4 py-2">
-        {{ topic }}
-    </h2>
+    <div class="flex flex-col flex-1">
 
-    <div
-        class="overflow-y-auto p-2 border dark:border-slate-700 rounded-xl m-4 flex flex-col h-full"
-    >
-        <ul
-            class="flex flex-col gap-10 overflow-y-scroll px-2 py-10"
-            ref="messageList"
-            @scroll="loadMoreMessages"
-        >
-            <li v-for="message in messages" :key="message.id">
-                <Message :message="message" :authUser="authUser" />
-            </li>
-        </ul>
+        <h2 class="w-full px-4 py-2">
+            {{ topic }}
+        </h2>
 
-        <chat-input :conversationId="route.params.conversationId"></chat-input>
+        <div class="p-2 border dark:border-slate-700 rounded-xl m-4 flex flex-col flex-1">
+            <ul class="h-0 flex flex-col flex-auto gap-10 overflow-y-scroll px-2 py-10" ref="messageList" @scroll="loadMoreMessages">
+                <li v-for="message in messages" :key="message.id">
+                    <Message :message="message" :authUser="authUser" />
+                </li>
+            </ul>
+
+            <chat-input :conversationId="route.params.conversationId"></chat-input>
+        </div>
     </div>
 </template>
 
@@ -26,12 +23,15 @@ import { ref, watch, onMounted, onBeforeMount } from "vue";
 import Message from "../Chat/Message.vue";
 import ChatInput from "../Chat/Input.vue";
 import api from "@/api";
-
-import { useUsers } from "@/composables/users";
-
 import { useConversations } from "../../composables/conversations";
 
-const { authUser, getAuthUser } = useUsers();
+import { useAuthStore } from "../../store/auth";
+
+
+const authStore = useAuthStore();
+
+const authUser = authStore.user;
+
 const { topic, messages, getMessages } = useConversations();
 
 const messageList = ref(null);
@@ -63,10 +63,6 @@ async function listen() {
         }
     );
 }
-
-onBeforeMount(() => {
-    getAuthUser();
-})
 
 onMounted(() => {
     getMessages();
