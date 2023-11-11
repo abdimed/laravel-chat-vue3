@@ -6,8 +6,8 @@
 
         <div v-if="authUser" class="rounded-lg p-2 max-w-lg" :class="
             authUser.id === message.user.id
-                ? 'bg-success text-white'
-                : 'bg-warning dark:bg-violet-500'">
+                ? 'bg-lightSilver dark:bg-slateSteel dark:text-lightSilver'
+                : 'bg-lightSilver  dark:bg-slateSteel dark:text-lightSilve'">
 
             <div class="break-all">{{ message.body }}</div>
 

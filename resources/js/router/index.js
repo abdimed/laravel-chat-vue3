@@ -39,7 +39,7 @@ const routes = [
 
 const router = createRouter({
     history: createWebHistory(),
-    linkActiveClass: 'bg-primary dark:bg-slate-700',
+    linkActiveClass: 'bg-silverMist dark:bg-slateSteel',
     routes
 });
 

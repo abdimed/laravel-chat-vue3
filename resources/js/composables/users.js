@@ -17,7 +17,6 @@ export function useUsers() {
 
     };
 
-
     return {
         users,
         getUsers,

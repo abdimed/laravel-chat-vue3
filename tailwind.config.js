@@ -13,7 +13,19 @@ export default {
                 secondary: '#d4e2f7',
                 success: '#848e98',
                 warning: '#e7e6e9',
-                danger : '#0000'
+                danger: '#0000',
+                midnight: '#0b0b0d',
+                charcoalNight: '#18171c',
+                slateSteel: '#242426',
+                lightSilver: '#FAFAFA',
+                silverMist: '#EEEEEE',
+
+                lightTeal: '#81E6D9',
+                peach: '#FFC3A0',
+
+                lightBlue: '#A0C4FF',
+                mintGreen: '#9BE3A3',
+
 
             }
         },

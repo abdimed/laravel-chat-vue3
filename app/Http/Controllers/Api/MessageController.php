@@ -9,8 +9,10 @@ use App\Http\Resources\UserResource;
 use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\User;
+use App\Notifications\NewMessageNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class MessageController extends Controller
 {
@@ -35,6 +37,16 @@ class MessageController extends Controller
         ]);
 
         NewMessage::dispatch($message);
+
+        $conversation = Conversation::findOrFail($request->conversation_id);
+
+        $usersInConversation = $conversation->users;
+
+        $usersToNotify = $usersInConversation->reject(function ($user) {
+            return $user->id === Auth::id();
+        });
+
+        Notification::send($usersToNotify, new NewMessageNotification($message));
 
         return response()->json($message);
     }
