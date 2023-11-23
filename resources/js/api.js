@@ -32,7 +32,7 @@ api.interceptors.response.use(
     (error) => {
         if (error.response && error.response.status === 401) {
             const authStore = useAuthStore();
-            // authStore.clearAuthToken()
+            authStore.clearAuthToken()
             console.log('Unauthorized request. Redirecting to login.');
             router.push({ name: 'login' });
         }

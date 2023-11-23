@@ -22,5 +22,4 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 
 Broadcast::channel('conversation.{conversationId}', function (User $user, int $conversationId) {
     return Auth::check();
-
 });

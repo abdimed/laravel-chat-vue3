@@ -18,28 +18,30 @@
         </form>
 
         <ul class="px-2">
-            <li v-for="conversation in conversations" :key="conversation.id" @click="clearNewMessageConversationId(conversation.id)">
+            <li v-for="conversation in conversations" :key="conversation.id"
+                @click="clearNewMessageConversationId(conversation.id)">
                 <router-link :to="`/messages/${conversation.id}`" class="block py-5 hover:animate-pulse px-4 rounded-xl">
                     {{ conversation.topic }}
-                    <div v-if="showNotificationDot(conversation.id)" class="bg-red-500 text-white w-2 h-2 rounded-full"></div>
+                    <div v-if="showNotificationDot(conversation.id)" class="bg-red-500 text-white w-2 h-2 rounded-full">
+                    </div>
                 </router-link>
             </li>
         </ul>
+
     </div>
 </template>
+
 <script setup>
-import UserCard from "../UserCard.vue";
 import { ref, onMounted } from "vue";
 import { useConversations } from "@/composables/conversations";
 import { useUsers } from "@/composables/users";
 import { useRoute } from "vue-router";
 import { useAuthStore } from "../../store/auth";
+import UserCard from "../UserCard.vue";
 
 const route = useRoute();
 
 const authStore = useAuthStore();
-
-const authUserId = authStore.user.id;
 
 const { users, getUsers } = useUsers();
 
@@ -47,10 +49,10 @@ const { conversations, getConversations, createConversation, topic } = useConver
 
 const show = ref(false);
 
-const newMessageConversationId = ref();
+const newMessageConversationId = ref(null);
 
 async function listenToNewMessageNotification() {
-    await Echo.private(`App.Models.User.${authUserId}`).notification((notification) => {
+    await Echo.private(`App.Models.User.${authStore.user.id}`).notification((notification) => {
         newMessageConversationId.value = notification.conversation;
     });
 }
@@ -60,7 +62,7 @@ const clearNewMessageConversationId = (conversationId) => {
 };
 
 const showNotificationDot = (conversationId) => {
-   return newMessageConversationId.value === conversationId && newMessageConversationId.value !== route.params.conversationId;
+    return newMessageConversationId.value === conversationId && newMessageConversationId.value !== parseFloat(route.params.conversationId);
 }
 
 onMounted(() => {

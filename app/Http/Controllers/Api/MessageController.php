@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\NewMessage;
+use App\Events\MessageSent;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\MessageResource;
 use App\Http\Resources\UserResource;
@@ -36,19 +36,8 @@ class MessageController extends Controller
             'body' => $request->body
         ]);
 
-        NewMessage::dispatch($message);
+        MessageSent::dispatch($message);
 
-        $conversation = Conversation::findOrFail($request->conversation_id);
-
-        $usersInConversation = $conversation->users;
-
-        $usersToNotify = $usersInConversation->reject(function ($user) {
-            return $user->id === Auth::id();
-        });
-
-        Notification::send($usersToNotify, new NewMessageNotification($message));
-
-        return response()->json($message);
     }
 
     /**

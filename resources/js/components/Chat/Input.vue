@@ -1,6 +1,7 @@
 <template>
     <form @submit.prevent="sendMessage" class="flex gap-x-5 pt-4">
-        <input v-model="message" ref="input" placeholder="Type your message..."
+
+        <input v-model="message" placeholder="Type your message..."
             class="w-full p-2 focus:outline-none border dark:border-none rounded-lg bg-gray-200 dark:bg-slateSteel h-fit resize-none" />
 
         <button type="submit">
@@ -9,22 +10,29 @@
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
             </svg>
-
         </button>
+
     </form>
 </template>
 
 <script setup>
 import api from "@/api";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUpdated } from "vue";
+import { useRoute } from "vue-router";
+const route = useRoute();
 
 const message = ref("");
-
-const input = ref(null);
 
 const props = defineProps({
     conversationId: String,
 });
+
+const typing = async () => {
+    await Echo.private(`conversation.${route.params.conversationId}`)
+        .whisper('typing', {
+            name: 'Joe Doe'
+        });
+}
 
 const sendMessage = async () => {
     await api.post("/messages", {
@@ -34,7 +42,13 @@ const sendMessage = async () => {
     message.value = "";
 };
 
+
+
 onMounted(() => {
-    input.value.focus();
+
 });
+
+onUpdated(() => {
+    typing();
+})
 </script>

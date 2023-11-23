@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+
 class ConversationResource extends JsonResource
 {
     /**
@@ -13,10 +14,13 @@ class ConversationResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+
         return [
             'id' => $this->id,
             'topic' => $this->topic,
             'participants' => UserResource::collection($this->users),
-            'messages' => MessagesCollection::make($this->messages()->orderBy('created_at', 'desc')->paginate(10)),];
+            'messages' => MessageCollection::make($this->messages()->latest()->paginate(20)),
+        ];
     }
+
 }

@@ -1,32 +1,33 @@
 <template>
-    <div class="flex flex-col flex-1 border-2 dark:border-slateSteel rounded-tl-xl">
+    <div class="flex flex-col flex-auto border-2 dark:border-slateSteel rounded-tl-xl">
 
         <h2 class="w-full px-4 py-2">
             {{ topic }}
         </h2>
 
-        <div class="py-2 px-4 rounded-xl m-4 flex flex-col flex-1">
-            <ul class="h-0 flex flex-col flex-auto gap-10 overflow-y-scroll px-4 py-10" ref="messageList" @scroll="loadMoreMessages">
+        <div class="py-2 px-4 rounded-xl m-4 flex flex-col flex-auto border border-red-500">
+            <ul class="h-0 flex flex-col flex-auto gap-10 overflow-y-auto px-4" ref="messagesList"
+                @scroll="loadMoreMessages">
                 <li v-for="message in messages" :key="message.id">
                     <Message :message="message" :authUser="authUser" />
                 </li>
+                <li v-if="isTyping"> isTyping </li>
             </ul>
-
-            <chat-input :conversationId="route.params.conversationId"></chat-input>
+            <button @click="scrollToBottom">Scroll</button>
+            <chat-input :conversationId="route.params.conversationId" @click="seen()"></chat-input>
         </div>
+
     </div>
 </template>
 
 <script setup>
 import { useRoute } from "vue-router";
-import { ref, watch, onMounted, onBeforeMount } from "vue";
-import Message from "../Chat/Message.vue";
-import ChatInput from "../Chat/Input.vue";
-import api from "@/api";
+import { ref, watch, onMounted, onBeforeMount, nextTick, onUpdated } from "vue";
 import { useConversations } from "../../composables/conversations";
 import { useAuthStore } from "../../store/auth";
-
-
+import api from "@/api";
+import Message from "../Chat/Message.vue";
+import ChatInput from "../Chat/Input.vue";
 
 const authStore = useAuthStore();
 
@@ -34,13 +35,15 @@ const authUser = authStore.user;
 
 const { topic, messages, getMessages } = useConversations();
 
-const messageList = ref(null);
+const messagesList = ref(null);
 const currentPage = ref(1);
 const route = useRoute();
+const isTyping = ref(false);
 
 //Improve this logic
 async function loadMoreMessages() {
-    if (messageList.value.scrollTop === 0) {
+
+    if (messagesList.value.scrollTop === 0) {
         currentPage.value++;
         try {
             const response = await api.get(
@@ -56,25 +59,40 @@ async function loadMoreMessages() {
 
 async function listen() {
     await Echo.private(`conversation.${route.params.conversationId}`).listen(
-        "NewMessage",
+        "MessageSent",
         (message) => {
             messages.value.push(message);
-            console.log(message);
         }
     );
+
 }
+
+const scrollToBottom = async () => {
+    messagesList.value.scrollTop = messagesList.value.scrollHeight;
+};
+
+
+async function listenForTyping() {
+    await Echo.private(`conversation.${route.params.conversationId}`)
+        .listenForWhisper('typing', (e) => {
+            isTyping.value = true;
+        });
+    isTyping.value = false;
+}
+
+onBeforeMount(() => {
+
+})
 
 onMounted(() => {
     getMessages();
     listen();
-    scrollToBottom();
+    listenForTyping()
 });
 
-const scrollToBottom = () => {
-    messageList.value.scrollTop = messageList.value.scrollHeight;
-    console.log(messageList.value.scrollTop);
-    console.log(messageList.value.scrollHeight);
-};
+onUpdated(() => {
+    scrollToBottom();
+})
 
 watch(
     () => route.params,
@@ -83,6 +101,7 @@ watch(
             Echo.leave(`conversation.${oldParams.conversationId}`);
             listen();
             getMessages();
+            // scrollToBottom();
         }
     }
 );

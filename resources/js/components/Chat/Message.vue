@@ -1,5 +1,6 @@
 <template>
     <div class="flex items-end gap-x-2" v-if="authUser" :dir="authUser.id === message.user.id ? 'rtl' : 'ltr'">
+
         <img :src="`https://ui-avatars.com/api/?rounded=true&size=40&name=${encodeURIComponent(
             message.user.name
         )}`" alt="{{ message.user.id}}" />
@@ -12,6 +13,7 @@
             <div class="break-all">{{ message.body }}</div>
 
         </div>
+
     </div>
 </template>
 

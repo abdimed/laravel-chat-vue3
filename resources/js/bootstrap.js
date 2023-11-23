@@ -49,11 +49,9 @@ window.Echo = new Echo({
                     }
                 })
                     .then(response => {
-                        console.log('Auth Response:', response.data);
                         callback(false, response.data);
                     })
                     .catch(error => {
-                        console.error('Auth Error:', error);
                         callback(true, error);
                     });
             }

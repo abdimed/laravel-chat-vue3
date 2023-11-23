@@ -6,7 +6,10 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ConversationController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Resources\MessageResource;
 use App\Http\Resources\UserResource;
+use App\Models\Message;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Broadcast;
 
@@ -40,6 +43,20 @@ Route::apiResource('messages', MessageController::class)->middleware('auth:sanct
 Route::apiResource('users', UserController::class);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return response()->json(new UserResource($request->user())) ;
+    return response()->json(new UserResource($request->user()));
 });
 
+Route::middleware('auth:sanctum')->post('/messages/seen', function (Request $request) {
+    $message = Message::findOrFail($request->messageId);
+
+    $seenBy = $message->seen_by ;
+    // if (!in_array($request->userId, $seenBy)) {
+    //     $seenBy[] = $request->userId;
+    // }
+    // $message->update(['seen_by' => $seenBy]);
+    return response()->json($seenBy);
+});
+
+Route::middleware('auth:sanctum')->get('/{id}/messages/unseen', function ($id) {
+    return MessageResource::collection(User::find($id)->unseenMessages()->get());
+});

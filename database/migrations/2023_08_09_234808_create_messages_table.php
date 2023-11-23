@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('conversation_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->text('body');
+            $table->json('seen_by')->default('null');
             $table->timestamps();
         });
     }
